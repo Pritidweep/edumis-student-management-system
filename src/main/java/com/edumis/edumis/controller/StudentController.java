@@ -1,6 +1,6 @@
 package com.edumis.edumis.controller;
 
-import com.edumis.edumis.model.Student;
+import com.edumis.edumis.dto.StudentDto;
 import com.edumis.edumis.service.StudentService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -19,30 +19,49 @@ public class StudentController {
         this.studentService = studentService;
     }
 
+    // CREATE
     @PostMapping
-    public ResponseEntity<Student> createStudent(@Valid @RequestBody Student student) {
-        Student created = studentService.createStudent(student);
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
+    public ResponseEntity<StudentDto> createStudent(
+            @Valid @RequestBody StudentDto studentDto) {
+
+        StudentDto createdStudent = studentService.createStudent(studentDto);
+
+        return new ResponseEntity<>(createdStudent, HttpStatus.CREATED);
     }
 
+    // READ ALL
     @GetMapping
-    public List<Student> getAllStudents() {
-        return studentService.getAllStudents();
+    public ResponseEntity<List<StudentDto>> getAllStudents() {
+
+        return ResponseEntity.ok(studentService.getAllStudents());
     }
 
+    // READ BY ID
     @GetMapping("/{id}")
-    public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
+    public ResponseEntity<StudentDto> getStudentById(
+            @PathVariable Long id) {
+
         return ResponseEntity.ok(studentService.getStudentById(id));
     }
 
+    // UPDATE
     @PutMapping("/{id}")
-    public ResponseEntity<Student> updateStudent(@PathVariable Long id, @Valid @RequestBody Student student) {
-        return ResponseEntity.ok(studentService.updateStudent(id, student));
+    public ResponseEntity<StudentDto> updateStudent(
+            @PathVariable Long id,
+            @Valid @RequestBody StudentDto studentDto) {
+
+        return ResponseEntity.ok(
+                studentService.updateStudent(id, studentDto)
+        );
     }
 
+    // DELETE
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteStudent(
+            @PathVariable Long id) {
+
         studentService.deleteStudent(id);
+
         return ResponseEntity.noContent().build();
     }
 }
