@@ -7,8 +7,9 @@ import com.edumis.edumis.mapper.StudentMapper;
 import com.edumis.edumis.model.Student;
 import com.edumis.edumis.repository.StudentRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 
 @Service
 public class StudentService {
@@ -35,12 +36,11 @@ public class StudentService {
 }
 
     // READ ALL
-    public List<StudentDto> getAllStudents() {
-        return studentRepository.findAll()
-                .stream()
-                .map(StudentMapper::mapToStudentDto)
-                .toList();
-    }
+    public Page<StudentDto> getAllStudents(Pageable pageable) {
+
+    return studentRepository.findAll(pageable)
+            .map(StudentMapper::mapToStudentDto);
+}
 
     // READ BY ID
     public StudentDto getStudentById(Long id) {

@@ -3,11 +3,11 @@ package com.edumis.edumis.controller;
 import com.edumis.edumis.dto.StudentDto;
 import com.edumis.edumis.service.StudentService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/students")
@@ -25,15 +25,13 @@ public class StudentController {
             @Valid @RequestBody StudentDto studentDto) {
 
         StudentDto createdStudent = studentService.createStudent(studentDto);
-
         return new ResponseEntity<>(createdStudent, HttpStatus.CREATED);
     }
 
-    // READ ALL
+    // READ ALL - PAGINATED
     @GetMapping
-    public ResponseEntity<List<StudentDto>> getAllStudents() {
-
-        return ResponseEntity.ok(studentService.getAllStudents());
+    public Page<StudentDto> getAllStudents(Pageable pageable) {
+        return studentService.getAllStudents(pageable);
     }
 
     // READ BY ID
@@ -61,7 +59,6 @@ public class StudentController {
             @PathVariable Long id) {
 
         studentService.deleteStudent(id);
-
         return ResponseEntity.noContent().build();
     }
 }
