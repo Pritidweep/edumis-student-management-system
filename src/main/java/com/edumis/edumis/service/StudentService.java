@@ -1,6 +1,7 @@
 package com.edumis.edumis.service;
 
 import com.edumis.edumis.dto.StudentDto;
+import com.edumis.edumis.exception.DuplicateEmailException;
 import com.edumis.edumis.exception.StudentNotFoundException;
 import com.edumis.edumis.mapper.StudentMapper;
 import com.edumis.edumis.model.Student;
@@ -20,10 +21,18 @@ public class StudentService {
 
     // CREATE
     public StudentDto createStudent(StudentDto studentDto) {
-        Student student = StudentMapper.mapToStudent(studentDto);
-        Student savedStudent = studentRepository.save(student);
-        return StudentMapper.mapToStudentDto(savedStudent);
-    }
+
+    studentRepository.findByEmail(studentDto.getEmail())
+            .ifPresent(student -> {
+                throw new DuplicateEmailException(studentDto.getEmail());
+            });
+
+    Student student = StudentMapper.mapToStudent(studentDto);
+
+    Student savedStudent = studentRepository.save(student);
+
+    return StudentMapper.mapToStudentDto(savedStudent);
+}
 
     // READ ALL
     public List<StudentDto> getAllStudents() {
@@ -43,17 +52,22 @@ public class StudentService {
 
     // UPDATE
     public StudentDto updateStudent(Long id, StudentDto studentDto) {
-        Student existingStudent = studentRepository.findById(id)
-                .orElseThrow(() -> new StudentNotFoundException(id));
 
-        existingStudent.setFirstName(studentDto.getFirstName());
-        existingStudent.setLastName(studentDto.getLastName());
-        existingStudent.setEmail(studentDto.getEmail());
-        existingStudent.setDepartment(studentDto.getDepartment());
+    Student existingStudent = studentRepository.findById(id)
+            .orElseThrow(() -> new StudentNotFoundException(id));
 
-        Student updatedStudent = studentRepository.save(existingStudent);
+    if (studentRepository.existsByEmailAndIdNot(studentDto.getEmail(), id)) {
+        throw new DuplicateEmailException(studentDto.getEmail());
+    }
 
-        return StudentMapper.mapToStudentDto(updatedStudent);
+    existingStudent.setFirstName(studentDto.getFirstName());
+    existingStudent.setLastName(studentDto.getLastName());
+    existingStudent.setEmail(studentDto.getEmail());
+    existingStudent.setDepartment(studentDto.getDepartment());
+
+    Student updatedStudent = studentRepository.save(existingStudent);
+
+    return StudentMapper.mapToStudentDto(updatedStudent);
     }
 
     // DELETE
