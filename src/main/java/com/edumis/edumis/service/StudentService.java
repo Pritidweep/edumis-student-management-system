@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 
 @Service
 public class StudentService {
@@ -35,7 +36,66 @@ public class StudentService {
     return StudentMapper.mapToStudentDto(savedStudent);
 }
 
-    // READ ALL
+     // SEARCH BY FIRST NAME
+public List<StudentDto> searchByFirstName(String firstName) {
+    return studentRepository.findByFirstNameContainingIgnoreCase(firstName)
+            .stream()
+            .map(StudentMapper::mapToStudentDto)
+            .toList();
+}
+
+    // SEARCH BY LAST NAME
+public List<StudentDto> searchByLastName(String lastName) {
+    return studentRepository.findByLastNameContainingIgnoreCase(lastName)
+            .stream()
+            .map(StudentMapper::mapToStudentDto)
+            .toList();
+}
+
+// SEARCH BY EMAIL
+public List<StudentDto> searchByEmail(String email) {
+    return studentRepository.findByEmailContainingIgnoreCase(email)
+            .stream()
+            .map(StudentMapper::mapToStudentDto)
+            .toList();
+}
+
+// SEARCH BY DEPARTMENT
+public List<StudentDto> searchByDepartment(String department) {
+    return studentRepository.findByDepartmentContainingIgnoreCase(department)
+            .stream()
+            .map(StudentMapper::mapToStudentDto)
+            .toList();
+}
+// // UNIVERSAL SEARCH
+// public List<StudentDto> searchStudents(String query) {
+
+//     return studentRepository
+//             .findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCaseOrDepartmentContainingIgnoreCase(
+//                     query,
+//                     query,
+//                     query,
+//                     query
+//             )
+//             .stream()
+//             .map(StudentMapper::mapToStudentDto)
+//             .toList();
+// }
+
+    // UNIVERSAL SEARCH WITH PAGINATION
+       public Page<StudentDto> searchStudents(String query, Pageable pageable) {
+        return studentRepository
+            .findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCaseOrDepartmentContainingIgnoreCase(
+                    query,
+                    query,
+                    query,
+                    query,
+                    pageable
+            )
+            .map(StudentMapper::mapToStudentDto);
+}
+   
+// READ ALL
     public Page<StudentDto> getAllStudents(Pageable pageable) {
 
     return studentRepository.findAll(pageable)
