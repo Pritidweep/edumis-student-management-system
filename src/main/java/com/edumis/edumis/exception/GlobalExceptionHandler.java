@@ -55,4 +55,34 @@ public class GlobalExceptionHandler {
     return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
+    // HANDLE DEPARTMENT NOT FOUND
+    @ExceptionHandler(DepartmentNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleDepartmentNotFound(
+        DepartmentNotFoundException ex) {
+
+    ErrorResponse error = new ErrorResponse(
+            HttpStatus.NOT_FOUND.value(),
+            ex.getMessage(),
+            LocalDateTime.now()
+    );
+
+    return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+
+    }
+
+    // HANDLE DUPLICATE DEPARTMENT
+    @ExceptionHandler(DuplicateDepartmentException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicateDepartment(
+        DuplicateDepartmentException ex) {
+
+    ErrorResponse error = new ErrorResponse(
+            HttpStatus.CONFLICT.value(),
+            ex.getMessage(),
+            LocalDateTime.now()
+    );
+
+    return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+
+    }
+
 }
