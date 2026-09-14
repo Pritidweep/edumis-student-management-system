@@ -85,4 +85,32 @@ public class GlobalExceptionHandler {
 
     }
 
+     @ExceptionHandler(TeacherNotFoundException.class)
+     public ResponseEntity<ErrorResponse> handleTeacherNotFound(
+        TeacherNotFoundException ex) {
+            
+            ErrorResponse error = new ErrorResponse(
+            HttpStatus.NOT_FOUND.value(),
+            ex.getMessage(),
+            LocalDateTime.now()
+        );
+        
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    
+    }
+    
+    @ExceptionHandler(DuplicateTeacherEmailException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicateTeacherEmail(
+        DuplicateTeacherEmailException ex) {
+            
+            ErrorResponse error = new ErrorResponse(
+            HttpStatus.CONFLICT.value(),
+            ex.getMessage(),
+            LocalDateTime.now()
+        
+        );
+        
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+
 }
