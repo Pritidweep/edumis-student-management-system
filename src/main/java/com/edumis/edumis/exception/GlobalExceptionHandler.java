@@ -113,4 +113,36 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
+    // HANDLE COURSE NOT FOUND
+    @ExceptionHandler(CourseNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleCourseNotFound(
+        CourseNotFoundException ex) {
+            
+            ErrorResponse error = new ErrorResponse(
+            HttpStatus.NOT_FOUND.value(),
+            ex.getMessage(),
+            LocalDateTime.now()
+        
+        );
+        
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    
+    }
+    
+    // HANDLE DUPLICATE COURSE
+    @ExceptionHandler(DuplicateCourseException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicateCourse(
+        DuplicateCourseException ex) {
+            
+            ErrorResponse error = new ErrorResponse(
+            HttpStatus.CONFLICT.value(),
+            ex.getMessage(),
+            LocalDateTime.now()
+        
+        );
+        
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    
+    }
+
 }
