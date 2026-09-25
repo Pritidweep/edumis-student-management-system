@@ -42,38 +42,29 @@ public class AttendanceService {
 
         Student student = studentRepository
                 .findById(attendanceDto.getStudentId())
-                .orElseThrow(() ->
-                        new StudentNotFoundException(
-                                attendanceDto.getStudentId()
-                        )
-                );
+                .orElseThrow(() -> new StudentNotFoundException(
+                        attendanceDto.getStudentId()));
 
         Course course = courseRepository
                 .findById(attendanceDto.getCourseId())
-                .orElseThrow(() ->
-                        new CourseNotFoundException(
-                                attendanceDto.getCourseId()
-                        )
-                );
-        
+                .orElseThrow(() -> new CourseNotFoundException(
+                        attendanceDto.getCourseId()));
+
         if (attendanceRepository.existsByStudentIdAndCourseIdAndAttendanceDate(
-            student.getId(),
-            course.getId(),
-            attendanceDto.getAttendanceDate())) {
-                
-                throw new DuplicateAttendanceException(
-                    "Attendance already exists for this student, course and date"
-                );
+                student.getId(),
+                course.getId(),
+                attendanceDto.getAttendanceDate())) {
+
+            throw new DuplicateAttendanceException(
+                    "Attendance already exists for this student, course and date");
         }
 
         Attendance attendance = AttendanceMapper.mapToAttendance(
                 attendanceDto,
                 student,
-                course
-        );
+                course);
 
-        Attendance savedAttendance =
-                attendanceRepository.save(attendance);
+        Attendance savedAttendance = attendanceRepository.save(attendance);
 
         return AttendanceMapper.mapToAttendanceDto(savedAttendance);
     }
@@ -81,126 +72,112 @@ public class AttendanceService {
     // READ ALL
     public Page<AttendanceDto> getAllAttendance(Pageable pageable) {
         return attendanceRepository
-        .findAll(pageable)
-        .map(AttendanceMapper::mapToAttendanceDto);
+                .findAll(pageable)
+                .map(AttendanceMapper::mapToAttendanceDto);
     }
 
     // READ BY ID
     public AttendanceDto getAttendanceById(Long id) {
-        
+
         Attendance attendance = attendanceRepository
-        .findById(id)
-        .orElseThrow(() ->
-                    new AttendanceNotFoundException(id)
-                );
-                
-            return AttendanceMapper.mapToAttendanceDto(attendance);
+                .findById(id)
+                .orElseThrow(() -> new AttendanceNotFoundException(id));
+
+        return AttendanceMapper.mapToAttendanceDto(attendance);
     }
 
     // UPDATE
     public AttendanceDto updateAttendance(
-          Long id,
-          AttendanceDto attendanceDto) {
-            
+            Long id,
+            AttendanceDto attendanceDto) {
+
         Attendance existingAttendance = attendanceRepository
-            .findById(id)
-            .orElseThrow(() ->
-                    new AttendanceNotFoundException(id)
-            );
+                .findById(id)
+                .orElseThrow(() -> new AttendanceNotFoundException(id));
 
-       Student student = studentRepository
-            .findById(attendanceDto.getStudentId())
-            .orElseThrow(() ->
-                    new StudentNotFoundException(
-                            attendanceDto.getStudentId()
-                    )
-            );
+        Student student = studentRepository
+                .findById(attendanceDto.getStudentId())
+                .orElseThrow(() -> new StudentNotFoundException(
+                        attendanceDto.getStudentId()));
 
-      Course course = courseRepository
-            .findById(attendanceDto.getCourseId())
-            .orElseThrow(() ->
-                    new CourseNotFoundException(
-                            attendanceDto.getCourseId()
-                    )
-            );
+        Course course = courseRepository
+                .findById(attendanceDto.getCourseId())
+                .orElseThrow(() -> new CourseNotFoundException(
+                        attendanceDto.getCourseId()));
 
         if (attendanceRepository
-        .existsByStudentIdAndCourseIdAndAttendanceDateAndIdNot(
-                student.getId(),
-                course.getId(),
-                attendanceDto.getAttendanceDate(),
-                id)) {
+                .existsByStudentIdAndCourseIdAndAttendanceDateAndIdNot(
+                        student.getId(),
+                        course.getId(),
+                        attendanceDto.getAttendanceDate(),
+                        id)) {
 
-    throw new DuplicateAttendanceException(
-            "Attendance already exists for this student, course and date"
-    );
-}
+            throw new DuplicateAttendanceException(
+                    "Attendance already exists for this student, course and date");
+        }
 
-    existingAttendance.setStudent(student);
-    existingAttendance.setCourse(course);
-    existingAttendance.setAttendanceDate(
-            attendanceDto.getAttendanceDate()
-    );
-    existingAttendance.setStatus(
-            attendanceDto.getStatus()
-    );
+        existingAttendance.setStudent(student);
+        existingAttendance.setCourse(course);
+        existingAttendance.setAttendanceDate(
+                attendanceDto.getAttendanceDate());
+        existingAttendance.setStatus(
+                attendanceDto.getStatus());
 
-    Attendance updatedAttendance =
-            attendanceRepository.save(existingAttendance);
+        Attendance updatedAttendance = attendanceRepository.save(existingAttendance);
 
-    return AttendanceMapper.mapToAttendanceDto(updatedAttendance);
-  }
+        return AttendanceMapper.mapToAttendanceDto(updatedAttendance);
+    }
+
     // DELETE
-    public void deleteAttendance(Long id) { 
-        
+    public void deleteAttendance(Long id) {
+
         if (!attendanceRepository.existsById(id)) {
             throw new AttendanceNotFoundException(id);
         }
-        
+
         attendanceRepository.deleteById(id);
-    
+
     }
 
     // SEARCH BY STUDENT ID
     public Page<AttendanceDto> searchByStudentId(
-        Long studentId,
-        Pageable pageable) {
-            
-            return attendanceRepository
-            .findByStudentId(studentId, pageable)
-            .map(AttendanceMapper::mapToAttendanceDto);
+            Long studentId,
+            Pageable pageable) {
+
+        return attendanceRepository
+                .findByStudentId(studentId, pageable)
+                .map(AttendanceMapper::mapToAttendanceDto);
     }
 
     // SEARCH BY COURSE ID
     public Page<AttendanceDto> searchByCourseId(
-        Long courseId,
-        Pageable pageable) {
-            
-            return attendanceRepository
-            .findByCourseId(courseId, pageable)
-            .map(AttendanceMapper::mapToAttendanceDto);
-    
+            Long courseId,
+            Pageable pageable) {
+
+        return attendanceRepository
+                .findByCourseId(courseId, pageable)
+                .map(AttendanceMapper::mapToAttendanceDto);
+
     }
 
     // SEARCH BY ATTENDANCE DATE
     public Page<AttendanceDto> searchByAttendanceDate(
-        LocalDate attendanceDate,
-        Pageable pageable) {
-            
-            return attendanceRepository
-            .findByAttendanceDate(attendanceDate, pageable)
-            .map(AttendanceMapper::mapToAttendanceDto);
+            LocalDate attendanceDate,
+            Pageable pageable) {
+
+        return attendanceRepository
+                .findByAttendanceDate(attendanceDate, pageable)
+                .map(AttendanceMapper::mapToAttendanceDto);
     }
 
     // SEARCH BY STATUS
     public Page<AttendanceDto> searchByStatus(
-        String status,
-        Pageable pageable) {
-            
-            return attendanceRepository
-            .findByStatusContainingIgnoreCase(status, pageable)
-            .map(AttendanceMapper::mapToAttendanceDto);
-    }
+            String status,
+            Pageable pageable) {
 
+        return attendanceRepository
+                .findByStatusContainingIgnoreCase(status, pageable)
+                .map(AttendanceMapper::mapToAttendanceDto);
+    }
 
 }

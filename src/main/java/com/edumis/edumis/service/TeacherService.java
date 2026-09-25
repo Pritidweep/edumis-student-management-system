@@ -27,8 +27,7 @@ public class TeacherService {
         teacherRepository.findByEmail(teacherDto.getEmail())
                 .ifPresent(teacher -> {
                     throw new DuplicateTeacherEmailException(
-                            "Teacher email already exists: " + teacherDto.getEmail()
-                    );
+                            "Teacher email already exists: " + teacherDto.getEmail());
                 });
 
         Teacher teacher = TeacherMapper.mapToTeacher(teacherDto);
@@ -41,7 +40,7 @@ public class TeacherService {
     // READ ALL
     public Page<TeacherDto> getAllTeachers(Pageable pageable) {
         return teacherRepository.findAll(pageable)
-        .map(TeacherMapper::mapToTeacherDto);
+                .map(TeacherMapper::mapToTeacherDto);
     }
 
     // READ BY ID
@@ -61,8 +60,7 @@ public class TeacherService {
 
         if (teacherRepository.existsByEmailAndIdNot(teacherDto.getEmail(), id)) {
             throw new DuplicateTeacherEmailException(
-                    "Teacher email already exists: " + teacherDto.getEmail()
-            );
+                    "Teacher email already exists: " + teacherDto.getEmail());
         }
 
         existingTeacher.setFirstName(teacherDto.getFirstName());
@@ -89,42 +87,41 @@ public class TeacherService {
     // SEARCH BY FIRST NAME
     public List<TeacherDto> searchByFirstName(String firstName) {
         return teacherRepository.findByFirstNameContainingIgnoreCase(firstName)
-            .stream()
-            .map(TeacherMapper::mapToTeacherDto)
-            .toList();
-        }
-        
-        // SEARCH BY LAST NAME
-        public List<TeacherDto> searchByLastName(String lastName) {
-            return teacherRepository.findByLastNameContainingIgnoreCase(lastName)
-            .stream()
-            .map(TeacherMapper::mapToTeacherDto)
-            .toList();
-        
-        }
-        
-        // SEARCH BY DEPARTMENT
-        public List<TeacherDto> searchByDepartment(String department) {
-            return teacherRepository.findByDepartmentContainingIgnoreCase(department)
-            .stream()
-            .map(TeacherMapper::mapToTeacherDto)
-            .toList();
-        
-        }
+                .stream()
+                .map(TeacherMapper::mapToTeacherDto)
+                .toList();
+    }
 
-        // UNIVERSAL SEARCH
-        public Page<TeacherDto> searchTeachers(
-        String query,
-        Pageable pageable) {
-            return teacherRepository
-            .findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCaseOrDepartmentContainingIgnoreCaseOrPhoneContainingIgnoreCase(
-                    query,
-                    query,
-                    query,
-                    query,
-                    query,
-                    pageable
-            )
-            .map(TeacherMapper::mapToTeacherDto);
-        }
+    // SEARCH BY LAST NAME
+    public List<TeacherDto> searchByLastName(String lastName) {
+        return teacherRepository.findByLastNameContainingIgnoreCase(lastName)
+                .stream()
+                .map(TeacherMapper::mapToTeacherDto)
+                .toList();
+
+    }
+
+    // SEARCH BY DEPARTMENT
+    public List<TeacherDto> searchByDepartment(String department) {
+        return teacherRepository.findByDepartmentContainingIgnoreCase(department)
+                .stream()
+                .map(TeacherMapper::mapToTeacherDto)
+                .toList();
+
+    }
+
+    // UNIVERSAL SEARCH
+    public Page<TeacherDto> searchTeachers(
+            String query,
+            Pageable pageable) {
+        return teacherRepository
+                .findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCaseOrDepartmentContainingIgnoreCaseOrPhoneContainingIgnoreCase(
+                        query,
+                        query,
+                        query,
+                        query,
+                        query,
+                        pageable)
+                .map(TeacherMapper::mapToTeacherDto);
+    }
 }

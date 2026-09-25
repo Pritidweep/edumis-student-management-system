@@ -27,15 +27,13 @@ public class CourseService {
         courseRepository.findByName(courseDto.getName())
                 .ifPresent(course -> {
                     throw new DuplicateCourseException(
-                            "Course name already exists: " + courseDto.getName()
-                    );
+                            "Course name already exists: " + courseDto.getName());
                 });
 
         courseRepository.findByCode(courseDto.getCode())
                 .ifPresent(course -> {
                     throw new DuplicateCourseException(
-                            "Course code already exists: " + courseDto.getCode()
-                    );
+                            "Course code already exists: " + courseDto.getCode());
                 });
 
         Course course = CourseMapper.mapToCourse(courseDto);
@@ -47,10 +45,10 @@ public class CourseService {
 
     // READ ALL
     public Page<CourseDto> getAllCourses(Pageable pageable) {
-        
+
         return courseRepository.findAll(pageable)
-            .map(CourseMapper::mapToCourseDto);
-        
+                .map(CourseMapper::mapToCourseDto);
+
     }
 
     // READ BY ID
@@ -65,49 +63,48 @@ public class CourseService {
     // SEARCH BY NAME
     public List<CourseDto> searchByName(String name) {
         return courseRepository.findByNameContainingIgnoreCase(name)
-        .stream()
-        .map(CourseMapper::mapToCourseDto)
-        .toList();
+                .stream()
+                .map(CourseMapper::mapToCourseDto)
+                .toList();
     }
-    
+
     // SEARCH BY CODE
     public List<CourseDto> searchByCode(String code) {
         return courseRepository.findByCodeContainingIgnoreCase(code)
-        .stream()
-        .map(CourseMapper::mapToCourseDto)
-        .toList();
+                .stream()
+                .map(CourseMapper::mapToCourseDto)
+                .toList();
     }
-    
+
     // SEARCH BY DEPARTMENT
     public List<CourseDto> searchByDepartment(String department) {
         return courseRepository.findByDepartmentContainingIgnoreCase(department)
-        .stream()
-        .map(CourseMapper::mapToCourseDto)
-        .toList();
+                .stream()
+                .map(CourseMapper::mapToCourseDto)
+                .toList();
     }
-    
+
     // SEARCH BY DESCRIPTION
     public List<CourseDto> searchByDescription(String description) {
         return courseRepository.findByDescriptionContainingIgnoreCase(description)
-        .stream()
-        .map(CourseMapper::mapToCourseDto)
-        .toList();
+                .stream()
+                .map(CourseMapper::mapToCourseDto)
+                .toList();
     }
 
     // UNIVERSAL SEARCH
     public Page<CourseDto> searchCourses(String query, Pageable pageable) {
-        
+
         return courseRepository
-        .findByNameContainingIgnoreCaseOrCodeContainingIgnoreCaseOrDepartmentContainingIgnoreCaseOrDescriptionContainingIgnoreCase(
-                    query,
-                    query,
-                    query,
-                    query,
-                    pageable
-            )
-            .map(CourseMapper::mapToCourseDto);
-        
-        }
+                .findByNameContainingIgnoreCaseOrCodeContainingIgnoreCaseOrDepartmentContainingIgnoreCaseOrDescriptionContainingIgnoreCase(
+                        query,
+                        query,
+                        query,
+                        query,
+                        pageable)
+                .map(CourseMapper::mapToCourseDto);
+
+    }
 
     // UPDATE
     public CourseDto updateCourse(Long id, CourseDto courseDto) {
@@ -117,14 +114,12 @@ public class CourseService {
 
         if (courseRepository.existsByNameAndIdNot(courseDto.getName(), id)) {
             throw new DuplicateCourseException(
-                    "Course name already exists: " + courseDto.getName()
-            );
+                    "Course name already exists: " + courseDto.getName());
         }
 
         if (courseRepository.existsByCodeAndIdNot(courseDto.getCode(), id)) {
             throw new DuplicateCourseException(
-                    "Course code already exists: " + courseDto.getCode()
-            );
+                    "Course code already exists: " + courseDto.getCode());
         }
 
         existingCourse.setName(courseDto.getName());

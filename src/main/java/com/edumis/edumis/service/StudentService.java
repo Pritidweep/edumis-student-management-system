@@ -24,83 +24,82 @@ public class StudentService {
     // CREATE
     public StudentDto createStudent(StudentDto studentDto) {
 
-    studentRepository.findByEmail(studentDto.getEmail())
-            .ifPresent(student -> {
-                throw new DuplicateEmailException(studentDto.getEmail());
-            });
+        studentRepository.findByEmail(studentDto.getEmail())
+                .ifPresent(student -> {
+                    throw new DuplicateEmailException(studentDto.getEmail());
+                });
 
-    Student student = StudentMapper.mapToStudent(studentDto);
+        Student student = StudentMapper.mapToStudent(studentDto);
 
-    Student savedStudent = studentRepository.save(student);
+        Student savedStudent = studentRepository.save(student);
 
-    return StudentMapper.mapToStudentDto(savedStudent);
-}
+        return StudentMapper.mapToStudentDto(savedStudent);
+    }
 
-     // SEARCH BY FIRST NAME
-public List<StudentDto> searchByFirstName(String firstName) {
-    return studentRepository.findByFirstNameContainingIgnoreCase(firstName)
-            .stream()
-            .map(StudentMapper::mapToStudentDto)
-            .toList();
-}
+    // SEARCH BY FIRST NAME
+    public List<StudentDto> searchByFirstName(String firstName) {
+        return studentRepository.findByFirstNameContainingIgnoreCase(firstName)
+                .stream()
+                .map(StudentMapper::mapToStudentDto)
+                .toList();
+    }
 
     // SEARCH BY LAST NAME
-public List<StudentDto> searchByLastName(String lastName) {
-    return studentRepository.findByLastNameContainingIgnoreCase(lastName)
-            .stream()
-            .map(StudentMapper::mapToStudentDto)
-            .toList();
-}
+    public List<StudentDto> searchByLastName(String lastName) {
+        return studentRepository.findByLastNameContainingIgnoreCase(lastName)
+                .stream()
+                .map(StudentMapper::mapToStudentDto)
+                .toList();
+    }
 
-// SEARCH BY EMAIL
-public List<StudentDto> searchByEmail(String email) {
-    return studentRepository.findByEmailContainingIgnoreCase(email)
-            .stream()
-            .map(StudentMapper::mapToStudentDto)
-            .toList();
-}
+    // SEARCH BY EMAIL
+    public List<StudentDto> searchByEmail(String email) {
+        return studentRepository.findByEmailContainingIgnoreCase(email)
+                .stream()
+                .map(StudentMapper::mapToStudentDto)
+                .toList();
+    }
 
-// SEARCH BY DEPARTMENT
-public List<StudentDto> searchByDepartment(String department) {
-    return studentRepository.findByDepartmentContainingIgnoreCase(department)
-            .stream()
-            .map(StudentMapper::mapToStudentDto)
-            .toList();
-}
-// // UNIVERSAL SEARCH
-// public List<StudentDto> searchStudents(String query) {
+    // SEARCH BY DEPARTMENT
+    public List<StudentDto> searchByDepartment(String department) {
+        return studentRepository.findByDepartmentContainingIgnoreCase(department)
+                .stream()
+                .map(StudentMapper::mapToStudentDto)
+                .toList();
+    }
+    // // UNIVERSAL SEARCH
+    // public List<StudentDto> searchStudents(String query) {
 
-//     return studentRepository
-//             .findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCaseOrDepartmentContainingIgnoreCase(
-//                     query,
-//                     query,
-//                     query,
-//                     query
-//             )
-//             .stream()
-//             .map(StudentMapper::mapToStudentDto)
-//             .toList();
-// }
+    // return studentRepository
+    // .findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCaseOrDepartmentContainingIgnoreCase(
+    // query,
+    // query,
+    // query,
+    // query
+    // )
+    // .stream()
+    // .map(StudentMapper::mapToStudentDto)
+    // .toList();
+    // }
 
     // UNIVERSAL SEARCH WITH PAGINATION
-       public Page<StudentDto> searchStudents(String query, Pageable pageable) {
+    public Page<StudentDto> searchStudents(String query, Pageable pageable) {
         return studentRepository
-            .findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCaseOrDepartmentContainingIgnoreCase(
-                    query,
-                    query,
-                    query,
-                    query,
-                    pageable
-            )
-            .map(StudentMapper::mapToStudentDto);
-}
-   
-// READ ALL
+                .findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCaseOrDepartmentContainingIgnoreCase(
+                        query,
+                        query,
+                        query,
+                        query,
+                        pageable)
+                .map(StudentMapper::mapToStudentDto);
+    }
+
+    // READ ALL
     public Page<StudentDto> getAllStudents(Pageable pageable) {
 
-    return studentRepository.findAll(pageable)
-            .map(StudentMapper::mapToStudentDto);
-}
+        return studentRepository.findAll(pageable)
+                .map(StudentMapper::mapToStudentDto);
+    }
 
     // READ BY ID
     public StudentDto getStudentById(Long id) {
@@ -113,21 +112,21 @@ public List<StudentDto> searchByDepartment(String department) {
     // UPDATE
     public StudentDto updateStudent(Long id, StudentDto studentDto) {
 
-    Student existingStudent = studentRepository.findById(id)
-            .orElseThrow(() -> new StudentNotFoundException(id));
+        Student existingStudent = studentRepository.findById(id)
+                .orElseThrow(() -> new StudentNotFoundException(id));
 
-    if (studentRepository.existsByEmailAndIdNot(studentDto.getEmail(), id)) {
-        throw new DuplicateEmailException(studentDto.getEmail());
-    }
+        if (studentRepository.existsByEmailAndIdNot(studentDto.getEmail(), id)) {
+            throw new DuplicateEmailException(studentDto.getEmail());
+        }
 
-    existingStudent.setFirstName(studentDto.getFirstName());
-    existingStudent.setLastName(studentDto.getLastName());
-    existingStudent.setEmail(studentDto.getEmail());
-    existingStudent.setDepartment(studentDto.getDepartment());
+        existingStudent.setFirstName(studentDto.getFirstName());
+        existingStudent.setLastName(studentDto.getLastName());
+        existingStudent.setEmail(studentDto.getEmail());
+        existingStudent.setDepartment(studentDto.getDepartment());
 
-    Student updatedStudent = studentRepository.save(existingStudent);
+        Student updatedStudent = studentRepository.save(existingStudent);
 
-    return StudentMapper.mapToStudentDto(updatedStudent);
+        return StudentMapper.mapToStudentDto(updatedStudent);
     }
 
     // DELETE

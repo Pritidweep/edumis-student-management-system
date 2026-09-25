@@ -21,8 +21,7 @@ public class GlobalExceptionHandler {
         ErrorResponse error = new ErrorResponse(
                 HttpStatus.NOT_FOUND.value(),
                 ex.getMessage(),
-                LocalDateTime.now()
-        );
+                LocalDateTime.now());
 
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
@@ -44,167 +43,201 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DuplicateEmailException.class)
     public ResponseEntity<ErrorResponse> handleDuplicateEmail(
-        DuplicateEmailException ex) {
+            DuplicateEmailException ex) {
 
-    ErrorResponse error = new ErrorResponse(
-            HttpStatus.CONFLICT.value(),
-            ex.getMessage(),
-            LocalDateTime.now()
-    );
+        ErrorResponse error = new ErrorResponse(
+                HttpStatus.CONFLICT.value(),
+                ex.getMessage(),
+                LocalDateTime.now());
 
-    return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
     // HANDLE DEPARTMENT NOT FOUND
     @ExceptionHandler(DepartmentNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleDepartmentNotFound(
-        DepartmentNotFoundException ex) {
+            DepartmentNotFoundException ex) {
 
-    ErrorResponse error = new ErrorResponse(
-            HttpStatus.NOT_FOUND.value(),
-            ex.getMessage(),
-            LocalDateTime.now()
-    );
+        ErrorResponse error = new ErrorResponse(
+                HttpStatus.NOT_FOUND.value(),
+                ex.getMessage(),
+                LocalDateTime.now());
 
-    return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
 
     }
 
     // HANDLE DUPLICATE DEPARTMENT
     @ExceptionHandler(DuplicateDepartmentException.class)
     public ResponseEntity<ErrorResponse> handleDuplicateDepartment(
-        DuplicateDepartmentException ex) {
+            DuplicateDepartmentException ex) {
 
-    ErrorResponse error = new ErrorResponse(
-            HttpStatus.CONFLICT.value(),
-            ex.getMessage(),
-            LocalDateTime.now()
-    );
+        ErrorResponse error = new ErrorResponse(
+                HttpStatus.CONFLICT.value(),
+                ex.getMessage(),
+                LocalDateTime.now());
 
-    return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
 
     }
 
-     @ExceptionHandler(TeacherNotFoundException.class)
-     public ResponseEntity<ErrorResponse> handleTeacherNotFound(
-        TeacherNotFoundException ex) {
-            
-            ErrorResponse error = new ErrorResponse(
-            HttpStatus.NOT_FOUND.value(),
-            ex.getMessage(),
-            LocalDateTime.now()
-        );
-        
+    @ExceptionHandler(TeacherNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleTeacherNotFound(
+            TeacherNotFoundException ex) {
+
+        ErrorResponse error = new ErrorResponse(
+                HttpStatus.NOT_FOUND.value(),
+                ex.getMessage(),
+                LocalDateTime.now());
+
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-    
+
     }
-    
+
     @ExceptionHandler(DuplicateTeacherEmailException.class)
     public ResponseEntity<ErrorResponse> handleDuplicateTeacherEmail(
-        DuplicateTeacherEmailException ex) {
-            
-            ErrorResponse error = new ErrorResponse(
-            HttpStatus.CONFLICT.value(),
-            ex.getMessage(),
-            LocalDateTime.now()
-        
+            DuplicateTeacherEmailException ex) {
+
+        ErrorResponse error = new ErrorResponse(
+                HttpStatus.CONFLICT.value(),
+                ex.getMessage(),
+                LocalDateTime.now()
+
         );
-        
+
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
     // HANDLE COURSE NOT FOUND
     @ExceptionHandler(CourseNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleCourseNotFound(
-        CourseNotFoundException ex) {
-            
-            ErrorResponse error = new ErrorResponse(
-            HttpStatus.NOT_FOUND.value(),
-            ex.getMessage(),
-            LocalDateTime.now()
-        
+            CourseNotFoundException ex) {
+
+        ErrorResponse error = new ErrorResponse(
+                HttpStatus.NOT_FOUND.value(),
+                ex.getMessage(),
+                LocalDateTime.now()
+
         );
-        
+
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-    
+
     }
-    
+
     // HANDLE DUPLICATE COURSE
     @ExceptionHandler(DuplicateCourseException.class)
     public ResponseEntity<ErrorResponse> handleDuplicateCourse(
-        DuplicateCourseException ex) {
-            
-            ErrorResponse error = new ErrorResponse(
-            HttpStatus.CONFLICT.value(),
-            ex.getMessage(),
-            LocalDateTime.now()
-        
+            DuplicateCourseException ex) {
+
+        ErrorResponse error = new ErrorResponse(
+                HttpStatus.CONFLICT.value(),
+                ex.getMessage(),
+                LocalDateTime.now()
+
         );
-        
+
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
-    
+
     }
 
     @ExceptionHandler(EnrollmentNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleEnrollmentNotFound(
-        EnrollmentNotFoundException ex) {
-            
-            ErrorResponse error = new ErrorResponse(
+            EnrollmentNotFoundException ex) {
+
+        ErrorResponse error = new ErrorResponse(
                 HttpStatus.NOT_FOUND.value(),
                 ex.getMessage(),
-                LocalDateTime.now()
-            );
-            
-            return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-        }
-    
+                LocalDateTime.now());
+
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
     // HANDLE DUPLICATE ENROLLMENT
     @ExceptionHandler(DuplicateEnrollmentException.class)
     public ResponseEntity<ErrorResponse> handleDuplicateEnrollment(
-        DuplicateEnrollmentException ex) {
-            
-            ErrorResponse error = new ErrorResponse(
+            DuplicateEnrollmentException ex) {
+
+        ErrorResponse error = new ErrorResponse(
                 HttpStatus.CONFLICT.value(),
                 ex.getMessage(),
-                LocalDateTime.now()
-            );
-            
-            return new ResponseEntity<>(error, HttpStatus.CONFLICT);
-        
-        }
+                LocalDateTime.now());
+
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+
+    }
 
     // HANDLE ATTENDANCE NOT FOUND
     @ExceptionHandler(AttendanceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleAttendanceNotFound(
-        AttendanceNotFoundException ex) {
-            
-            ErrorResponse error = new ErrorResponse(
+            AttendanceNotFoundException ex) {
+
+        ErrorResponse error = new ErrorResponse(
                 HttpStatus.NOT_FOUND.value(),
                 ex.getMessage(),
-                LocalDateTime.now()
-            );
-            
-            return new ResponseEntity<>(
+                LocalDateTime.now());
+
+        return new ResponseEntity<>(
                 error,
-                HttpStatus.NOT_FOUND
-            );
-        }
+                HttpStatus.NOT_FOUND);
+    }
 
     // HANDLE DUPLICATE ATTENDANCE
     @ExceptionHandler(DuplicateAttendanceException.class)
     public ResponseEntity<ErrorResponse> handleDuplicateAttendance(
-        DuplicateAttendanceException ex) {
-            
-            ErrorResponse error = new ErrorResponse(
+            DuplicateAttendanceException ex) {
+
+        ErrorResponse error = new ErrorResponse(
                 HttpStatus.CONFLICT.value(),
                 ex.getMessage(),
-                LocalDateTime.now()
-            );
-            
-            return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+                LocalDateTime.now());
+
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
-    
+    // HANDLE MARK NOT FOUND
+    @ExceptionHandler(MarkNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleMarkNotFound(
+            MarkNotFoundException ex) {
 
+        ErrorResponse error = new ErrorResponse(
+                HttpStatus.NOT_FOUND.value(),
+                ex.getMessage(),
+                LocalDateTime.now());
+
+        return new ResponseEntity<>(
+                error,
+                HttpStatus.NOT_FOUND);
+    }
+
+    // HANDLE DUPLICATE MARK
+    @ExceptionHandler(DuplicateMarkException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicateMark(
+            DuplicateMarkException ex) {
+
+        ErrorResponse error = new ErrorResponse(
+
+                HttpStatus.CONFLICT.value(),
+                ex.getMessage(),
+                LocalDateTime.now());
+
+        return new ResponseEntity<>(
+                error,
+                HttpStatus.CONFLICT);
+    }
+
+    // HANDLE INVALID ARGUMENT
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalArgument(
+            IllegalArgumentException ex) {
+
+        ErrorResponse error = new ErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                ex.getMessage(),
+                LocalDateTime.now());
+
+        return new ResponseEntity<>(
+                error,
+                HttpStatus.BAD_REQUEST);
+    }
 
 }

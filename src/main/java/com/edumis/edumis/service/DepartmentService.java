@@ -15,146 +15,138 @@ import java.util.List;
 @Service
 public class DepartmentService {
 
-    private final DepartmentRepository departmentRepository;
+        private final DepartmentRepository departmentRepository;
 
-    public DepartmentService(DepartmentRepository departmentRepository) {
-        this.departmentRepository = departmentRepository;
-    }
+        public DepartmentService(DepartmentRepository departmentRepository) {
+                this.departmentRepository = departmentRepository;
+        }
 
-    // CREATE
-   public DepartmentDto createDepartment(DepartmentDto departmentDto) {
+        // CREATE
+        public DepartmentDto createDepartment(DepartmentDto departmentDto) {
 
-    // Check duplicate department name
-    departmentRepository.findByName(departmentDto.getName())
-            .ifPresent(department -> {
-                throw new DuplicateDepartmentException(
-                        "Department name already exists: " + departmentDto.getName()
-                );
-            });
+                // Check duplicate department name
+                departmentRepository.findByName(departmentDto.getName())
+                                .ifPresent(department -> {
+                                        throw new DuplicateDepartmentException(
+                                                        "Department name already exists: " + departmentDto.getName());
+                                });
 
-    // Check duplicate department code
-    departmentRepository.findByCode(departmentDto.getCode())
-            .ifPresent(department -> {
-                throw new DuplicateDepartmentException(
-                        "Department code already exists: " + departmentDto.getCode()
-                );
-            });
+                // Check duplicate department code
+                departmentRepository.findByCode(departmentDto.getCode())
+                                .ifPresent(department -> {
+                                        throw new DuplicateDepartmentException(
+                                                        "Department code already exists: " + departmentDto.getCode());
+                                });
 
-    Department department =
-            DepartmentMapper.mapToDepartment(departmentDto);
+                Department department = DepartmentMapper.mapToDepartment(departmentDto);
 
-    Department savedDepartment =
-            departmentRepository.save(department);
+                Department savedDepartment = departmentRepository.save(department);
 
-    return DepartmentMapper.mapToDepartmentDto(savedDepartment);
+                return DepartmentMapper.mapToDepartmentDto(savedDepartment);
 
-    }
+        }
 
-    // READ ALL
-    public Page<DepartmentDto> getAllDepartments(Pageable pageable) {
+        // READ ALL
+        public Page<DepartmentDto> getAllDepartments(Pageable pageable) {
 
-    return departmentRepository.findAll(pageable)
-            .map(DepartmentMapper::mapToDepartmentDto);
-     
-    }
+                return departmentRepository.findAll(pageable)
+                                .map(DepartmentMapper::mapToDepartmentDto);
 
-    // READ BY ID
-    public DepartmentDto getDepartmentById(Long id) {
-        
-        Department department = departmentRepository.findById(id)
-            .orElseThrow(() -> new DepartmentNotFoundException(id));
+        }
 
-    return DepartmentMapper.mapToDepartmentDto(department);
-   
-    }
+        // READ BY ID
+        public DepartmentDto getDepartmentById(Long id) {
 
-    // UPDATE
-    public DepartmentDto updateDepartment(Long id, DepartmentDto departmentDto) {
+                Department department = departmentRepository.findById(id)
+                                .orElseThrow(() -> new DepartmentNotFoundException(id));
 
-    Department existingDepartment = departmentRepository.findById(id)
-            .orElseThrow(() -> new DepartmentNotFoundException(id));
+                return DepartmentMapper.mapToDepartmentDto(department);
 
-    // Check duplicate department name
-    if (departmentRepository.existsByNameAndIdNot(departmentDto.getName(), id)) {
-        throw new DuplicateDepartmentException(
-                "Department name already exists: " + departmentDto.getName()
-        );
-    }
+        }
 
-    // Check duplicate department code
-    if (departmentRepository.existsByCodeAndIdNot(departmentDto.getCode(), id)) {
-        throw new DuplicateDepartmentException(
-                "Department code already exists: " + departmentDto.getCode()
-        );
-    }
+        // UPDATE
+        public DepartmentDto updateDepartment(Long id, DepartmentDto departmentDto) {
 
-    existingDepartment.setName(departmentDto.getName());
-    existingDepartment.setCode(departmentDto.getCode());
-    existingDepartment.setDescription(departmentDto.getDescription());
+                Department existingDepartment = departmentRepository.findById(id)
+                                .orElseThrow(() -> new DepartmentNotFoundException(id));
 
-    Department updatedDepartment =
-            departmentRepository.save(existingDepartment);
+                // Check duplicate department name
+                if (departmentRepository.existsByNameAndIdNot(departmentDto.getName(), id)) {
+                        throw new DuplicateDepartmentException(
+                                        "Department name already exists: " + departmentDto.getName());
+                }
 
-    return DepartmentMapper.mapToDepartmentDto(updatedDepartment);
+                // Check duplicate department code
+                if (departmentRepository.existsByCodeAndIdNot(departmentDto.getCode(), id)) {
+                        throw new DuplicateDepartmentException(
+                                        "Department code already exists: " + departmentDto.getCode());
+                }
 
-    }
+                existingDepartment.setName(departmentDto.getName());
+                existingDepartment.setCode(departmentDto.getCode());
+                existingDepartment.setDescription(departmentDto.getDescription());
 
-    // DELETE
-    public void deleteDepartment(Long id) {
+                Department updatedDepartment = departmentRepository.save(existingDepartment);
 
-    if (!departmentRepository.existsById(id)) {
-    throw new DepartmentNotFoundException(id);
-    
-    }
+                return DepartmentMapper.mapToDepartmentDto(updatedDepartment);
 
-    departmentRepository.deleteById(id);
-  
-   }
+        }
 
-   // SEARCH BY NAME
-   public List<DepartmentDto> searchByName(String name) {
+        // DELETE
+        public void deleteDepartment(Long id) {
 
-    return departmentRepository.findByNameContainingIgnoreCase(name)
-            .stream()
-            .map(DepartmentMapper::mapToDepartmentDto)
-            .toList();
+                if (!departmentRepository.existsById(id)) {
+                        throw new DepartmentNotFoundException(id);
 
-    }
-    
-    // SEARCH BY CODE
-    public List<DepartmentDto> searchByCode(String code) {
+                }
 
-    return departmentRepository.findByCodeContainingIgnoreCase(code)
-            .stream()
-            .map(DepartmentMapper::mapToDepartmentDto)
-            .toList();
+                departmentRepository.deleteById(id);
 
-    }
-    
-    // SEARCH BY DESCRIPTION
-    public List<DepartmentDto> searchByDescription(String description) {
+        }
 
-    return departmentRepository.findByDescriptionContainingIgnoreCase(description)
-            .stream()
-            .map(DepartmentMapper::mapToDepartmentDto)
-            .toList();
+        // SEARCH BY NAME
+        public List<DepartmentDto> searchByName(String name) {
 
-    }
+                return departmentRepository.findByNameContainingIgnoreCase(name)
+                                .stream()
+                                .map(DepartmentMapper::mapToDepartmentDto)
+                                .toList();
 
-    // UNIVERSAL SEARCH
-    public Page<DepartmentDto> searchDepartments(
-        String query,
-        Pageable pageable) {
+        }
 
-    return departmentRepository
-            .findByNameContainingIgnoreCaseOrCodeContainingIgnoreCaseOrDescriptionContainingIgnoreCase(
-                    query,
-                    query,
-                    query,
-                    pageable
-            )
-            .map(DepartmentMapper::mapToDepartmentDto);
-        
+        // SEARCH BY CODE
+        public List<DepartmentDto> searchByCode(String code) {
+
+                return departmentRepository.findByCodeContainingIgnoreCase(code)
+                                .stream()
+                                .map(DepartmentMapper::mapToDepartmentDto)
+                                .toList();
+
+        }
+
+        // SEARCH BY DESCRIPTION
+        public List<DepartmentDto> searchByDescription(String description) {
+
+                return departmentRepository.findByDescriptionContainingIgnoreCase(description)
+                                .stream()
+                                .map(DepartmentMapper::mapToDepartmentDto)
+                                .toList();
+
+        }
+
+        // UNIVERSAL SEARCH
+        public Page<DepartmentDto> searchDepartments(
+                        String query,
+                        Pageable pageable) {
+
+                return departmentRepository
+                                .findByNameContainingIgnoreCaseOrCodeContainingIgnoreCaseOrDescriptionContainingIgnoreCase(
+                                                query,
+                                                query,
+                                                query,
+                                                pageable)
+                                .map(DepartmentMapper::mapToDepartmentDto);
+
         }
 
 }
