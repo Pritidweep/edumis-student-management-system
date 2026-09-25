@@ -145,4 +145,33 @@ public class GlobalExceptionHandler {
     
     }
 
+    @ExceptionHandler(EnrollmentNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleEnrollmentNotFound(
+        EnrollmentNotFoundException ex) {
+            
+            ErrorResponse error = new ErrorResponse(
+                HttpStatus.NOT_FOUND.value(),
+                ex.getMessage(),
+                LocalDateTime.now()
+            );
+            
+            return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        }
+    
+    // HANDLE DUPLICATE ENROLLMENT
+    @ExceptionHandler(DuplicateEnrollmentException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicateEnrollment(
+        DuplicateEnrollmentException ex) {
+            
+            ErrorResponse error = new ErrorResponse(
+                HttpStatus.CONFLICT.value(),
+                ex.getMessage(),
+                LocalDateTime.now()
+            );
+            
+            return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+        
+        }
+
+
 }
