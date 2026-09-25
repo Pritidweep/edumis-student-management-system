@@ -173,5 +173,38 @@ public class GlobalExceptionHandler {
         
         }
 
+    // HANDLE ATTENDANCE NOT FOUND
+    @ExceptionHandler(AttendanceNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleAttendanceNotFound(
+        AttendanceNotFoundException ex) {
+            
+            ErrorResponse error = new ErrorResponse(
+                HttpStatus.NOT_FOUND.value(),
+                ex.getMessage(),
+                LocalDateTime.now()
+            );
+            
+            return new ResponseEntity<>(
+                error,
+                HttpStatus.NOT_FOUND
+            );
+        }
+
+    // HANDLE DUPLICATE ATTENDANCE
+    @ExceptionHandler(DuplicateAttendanceException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicateAttendance(
+        DuplicateAttendanceException ex) {
+            
+            ErrorResponse error = new ErrorResponse(
+                HttpStatus.CONFLICT.value(),
+                ex.getMessage(),
+                LocalDateTime.now()
+            );
+            
+            return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+
+    
+
 
 }
